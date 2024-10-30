@@ -1,0 +1,419 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Challenge 5 API Docs",
+    "version": "1.0.0",
+    "description": "API documentation Challenge 5"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Registers a new user with a hashed password and profile details.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "wahyu"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "$2b$10$fB2rcCXx.rZf.dwdv6qfxuF7GB2NLE4VkB3YxeDG7KqY8na32oHX6"  
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "wahyu@mail.com"
+                  },
+                  "identity_type": {
+                    "type": "string",
+                    "enum": [
+                      "Driver License",
+                      "Pasport",
+                      "National ID"
+                    ],
+                    "example": "National ID"
+                  },
+                  "identity_number": {
+                    "type": "string",
+                    "example": "N123456744"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "876 qqq"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Berhasil ditambahkan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully added the data"
+                    },
+                    "user": {  
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 17
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "wahyu"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "wahyu@mail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error for user input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "\"name\" is not allowed to be empty"
+                      },
+                      "path": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "name"
+                        ]
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "string.empty"
+                      },
+                      "context": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "example": "name"
+                          },
+                          "value": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "key": {
+                            "type": "string",
+                            "example": "name"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email has been taken.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Login to the application.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "wahyu@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "$2b$10$fB2rcCXx.rZf.dwdv6qfxuF7GB2NLE4VkB3YxeDG7KqY8na32oHX6"  
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Welcome to the application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Selamat datang"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 17
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "wahyu"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "wahyu@mail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error for user input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "\"email\" is not allowed to be empty"
+                      },
+                      "path": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "email"
+                        ]
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "string.empty"
+                      },
+                      "context": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "example": "email"
+                          },
+                          "value": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "key": {
+                            "type": "string",
+                            "example": "email"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/authenticate": {
+      "get": {
+        "summary": "Authenticate User",
+        "description": "Authenticate the user based on the token.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody":{
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTcsIm5hbWUiOiJ3YWh5dSIsImVtYWlsIjoid2FoeXVAbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRmQjJyY0NYeC5yWmYuZHdkdjZxZnh1RjdHQjJOTEU0VmtCM1l4ZURHN0txWThuYTMyb0hYNiIsImlhdCI6MTczMDI3NzAzMX0.aBHlTywUjHQZaXKMuiDPb_bF3XFDQuT_dm7g-F7v-Tg"
+                  }
+                }
+              }
+            }
+          }    
+        },
+        "responses": {
+          "200": {
+            "description": "User authenticated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "null"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 17
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "wahyu"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "wahyu@mail.com"
+                        },
+                        "password": {
+                          "type": "string",
+                          "example": "$2b$10$fB2rcCXx.rZf.dwdv6qfxuF7GB2NLE4VkB3YxeDG7KqY8na32oHX6" 
+                        },
+                        "iat": {
+                          "type": "integer",
+                          "example": 1730277031
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
